@@ -1,0 +1,82 @@
+
+<div class="order">
+    <div class="user_and_order_info">
+        <div class="user_info">
+            <div class="user_image">
+                <div class="center">
+                    <%= image_tag "people/#{@user.id}.jpg",
+                            alt: "#{@user.name}'s profile picture",
+                            width: 320,
+                            height: 240 %>
+                </div>
+            </div>
+            <div class="user_name_balance">
+                <div class="name_logout">
+                    <div><%= @user.name%></div>
+                    <a href="/"><div class="button logout">Logout</div></a>
+                </div>
+                <div class="balance">
+                    <p class="small">Remaining credit
+                        <% if @user.balance >= 0.0 %>
+                          <p class="green"><%= sprintf("%.2f", @user.balance) %></p>
+                        <% else %>
+                          <p class="red"><%= sprintf("%.2f", @user.balance) %></p>
+                        <% end %>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="order_info">
+          <p class="big">Your order</p>
+          <table class="order_table" cellspacing="0">
+            <col width="120">
+            <col width="180">
+            <col width="60">
+            <tr>
+              <th class="left">Product</th>
+              <th class="center">Quantity</th>
+              <th class="center">Price</th>
+            </tr>
+            <% @orders.each do |order| %>
+              <tr>
+                <td class="left"><%= order.at(0) %></td>
+                <td class="center"><%= order.at(1) %> </td>
+                <td class="center"><%= sprintf("%.2f", order.at(2)) %> </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td class="left bold border_top">Total</td>
+              <td class="center border_top"></td>
+              <td class="center bold border_top"><%= sprintf("%.2f", @cost)%></td>
+            </tr>
+          </table>
+          <div class="order_buttons">
+            <%= link_to "/buy/new_order/#{@user.id}", method: "post" do %>
+              <div class="button cancel">Cancel</div>
+            <% end %>
+            <%= link_to "/buy/pay/#{@user.id}/#{@cost}", method: "post" do %>
+              <div class="button pay">Pay</div>
+            <% end %>
+          </div>
+        </div>
+    </div>
+
+    <div class="product_list">
+      <% @products.each do |product| %>
+        <div class="product_and_price">
+          <div class="product">
+            <%= link_to "/buy/#{@user.id}/add/#{product.id}", method: "post" do %>
+              <%= image_tag "products/#{product.name}.png",
+                      alt: "Picture of #{product.name}",
+                      width: 100,
+                      height: 100 %>
+            <% end %>
+          </div>
+          <div class="price">
+            <p><%= sprintf("%.2f",product.price) %> &nbsp;CHf</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+</div>
