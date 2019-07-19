@@ -40,4 +40,16 @@ class BuyController < ApplicationController
     Order.delete_all
     redirect_to "/buy/show/#{params[:id]}"
   end
+
+  def edit_picture2
+      @user = User.find(params[:id])
+  end
+
+  def save_picture
+      print("*****************\n")
+      print(params[:pic])
+      print("*****************\n")
+      @user = User.find(params[:id])
+      redirect_to "/buy/show/#{params[:id]}"
+  end
 end

@@ -1,0 +1,88 @@
+<div class="horizontal">
+    <div style="color:green;">
+        <%= flash[:success] %>
+    </div>
+    <div>
+        <a href="/admins/logout">Logout</a>
+    </div>
+</div>
+
+<h1>IPG Coffee Manager</h1>
+
+<h2>Create new user</h2>
+
+<%= form_tag "/admins/manager/add_user", method: "get" do %>
+  <div class="horizontal_close">
+      <div>
+          Sciper : <input type="text" name="old_sciper" />
+      </div>
+      <div style="margin-left: 20px">
+          <input type="submit" value="Search" />
+      </div>
+  </div>
+<% end %>
+
+<div style="color:red;">
+    <%=flash[:error_search] %>
+</div>
+<p>
+    Or enter the user info manually :
+</p>
+<%= form_tag "/admins/manager", method: "post", html: {autocomplete: "off"} do %>
+  <div style="display: flex; flex-direction: column;">
+      <div class=horizontal_close>
+          <div>
+              Name : <input type="text" name="name" autocomplete="off"/>
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_name] %>
+          </div>
+      </div>
+      <div class=horizontal_close>
+          <div>
+              Email : <input type="text" name="email" autocomplete="off"/>
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_email] %>
+          </div>
+      </div>
+      <div class=horizontal_close>
+          <div>
+              Sciper : <input type="text" name="sciper" autocomplete="off"/>
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_sciper] %>
+          </div>
+      </div>
+      <div class=horizontal_close>
+          <div>
+              Balance : <input type="text" name="balance" autocomplete="off"/>
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_balance] %>
+          </div>
+      </div>
+      <div>
+          <input type="submit" value="Create" />
+      </div>
+  </div>
+<% end %>
+
+<h2>List of users</h2>
+<% @users.each do |user| %>
+    <div class="user_list_elem">
+        <div style="width: 400px; text-align: left; margin-right:20px"><%= user.name %></div>
+        <div style="width: 400px; text-align: left; margin-right:20px"><%= user.email %></div>
+        <div style="width: 150px; text-align: left; margin-right:20px"><%= user.sciper %></div>
+        <div style="width: 100px; text-align: left; margin-right:20px"><%= (user.balance).round(2) %></div>
+        <div style="width: 40px; text-align: right; margin-right: 20px">
+            <%= button_to("Edit", "/admins/edit_user/" + user.id.to_s,
+                method: :get) %>
+        </div>
+        <div style="width: 40px; text-align: left">
+            <%= button_to("Delete", "/admins/delete_user/" + user.id.to_s,
+                method: :delete, data: { confirm: "Do you really " +
+                "want to delete user " + user.name + " ?" }) %>
+        </div>
+    </div>
+<% end %>

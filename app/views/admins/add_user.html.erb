@@ -1,0 +1,65 @@
+<div align="right">
+    <a href="/admins/logout">Logout</a>
+</div>
+
+<h1>IPG Coffee Manager</h1>
+
+<h2>Add user</h2>
+
+<% if @path_pic != nil and @path_pic.is_a? String and @path_pic.length > 0%>
+<img src=<%=@path_pic%>, alt="profile picture" />
+<p>
+    '<%=@path_pic%>'
+</p>
+<% else %>
+<p>no picture found</p>
+<% end %>
+
+<%= form_tag "/admins/save_new_user/"+ @sciper, method: "post" do %>
+  <%= hidden_field_tag :path_pic, @path_pic %>
+  <div style="display: flex; flex-direction: column;">
+      <div class=horizontal_close>
+          <div>
+              Name : <input type="text" name="name" value="<%=@name%>" />
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_name] %>
+          </div>
+      </div>
+      <div class=horizontal_close>
+          <div>
+              Email : <input type="text" name="email" value="<%=@email%>" />
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_email] %>
+          </div>
+      </div>
+      <div class=horizontal_close>
+          <div>
+              Sciper : <input type="text" name="sciper" value="<%=@sciper%>" />
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_sciper] %>
+          </div>
+      </div>
+      <div class=horizontal_close>
+          <div>
+              Balance : <input type="text" name="balance" value="<%=0.0%>" />
+          </div>
+          <div style="color:red; margin-left: 10px">
+              <%= flash[:error_balance] %>
+          </div>
+      </div>
+      <div>
+          <input type="submit" value="Save" />
+      </div>
+  </div>
+<% end %>
+
+<div class="back_edit">
+    <% flash[:error_name] = nil %>
+    <% flash[:error_email] = nil%>
+    <% flash[:error_sciper] = nil%>
+    <% flash[:error_balance] = nil%>
+    <%= button_to("Back", "/admins/manager/", method: :get) %>
+</div>

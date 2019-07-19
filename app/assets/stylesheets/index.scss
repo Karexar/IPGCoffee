@@ -2,6 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.horizontal{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.horizontal_close{
+    display: flex;
+    flex-direction: row;
+}
+
 div.images_list {
   margin: 2%;
   display: flex;

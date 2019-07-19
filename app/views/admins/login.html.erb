@@ -1,0 +1,10 @@
+<h1>Login as admin</h1>
+<%= form_tag "/admins/login", method: :post do %>
+  Password : <input type="password" name="password" />
+  <input type="submit" value="Login" />
+<% end %>
+<% if flash[:error] != nil%>
+    <p style="color:red"><%= flash[:error]%></p>
+<% end %>
+<p></p>
+<a href="/">Back to main page</a>

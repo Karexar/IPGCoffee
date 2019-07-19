@@ -1,0 +1,74 @@
+
+<h2>User picture</h2>
+
+<div id="cam_container">
+    <div id="my_camera"></div>
+    <div id="results"></div>
+</div>
+
+<!-- First, include the Webcam.js JavaScript Library -->
+<script type="text/javascript" src="webcam.min.js"></script>
+<script type="text/javascript" src="download.js"></script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>-->
+
+<!-- Configure a few settings and attach camera -->
+<script language="JavaScript">
+    Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+    Webcam.attach( '#my_camera' );
+</script>
+
+<!-- A button for taking snaps -->
+<form>
+    <input type=button value="Take Snapshot" onClick="take_snapshot()">
+</form>
+
+<!-- Code to handle taking the snapshot and displaying it locally -->
+<script language="JavaScript">
+
+    var img_uri;
+
+    function save_pic() {
+        //console.log(img_uri);
+        //download("hello world", "dlText.txt", "text/plain");
+        //window.location('/buy/edit/' + <%= @user.id.to_s %>);
+        /*$.ajax({
+           url:'/buy/save_picture',
+           data:(
+             'id=' + <%= @user.id.to_s %> + '&' +
+             'pic=' + img_uri
+           )
+        })*/
+    }
+
+    function reload_cam() {
+        document.getElementById('results').innerHTML = '';
+    }
+
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap( function(data_uri) {
+            // display results in page
+
+            img_uri = data_uri
+            document.getElementById('results').innerHTML =
+                '<img src="'+data_uri+'"/>' +
+                '<h3>Keep this picture ?</h3>' +
+                '<input type=button value="No" onClick="reload_cam()">' +
+                '<input type=button value="Yes" onClick="save_pic()">';
+                //'<%= form_tag "/buy/save_picture", method: :post do %>' +
+                //  '<%= hidden_field_tag "pic", @img_uri %>' +
+                //  '<%= hidden_field_tag "id", @user.id.to_s %>' +
+                //  '<input type="submit" value="Yes" />' +
+                //'<% end %>';
+                //'<%= link_to "Yes", {:controller => "buy", :action => "save_picture", :image => "test", :id => @user.id }%>';
+                //'<input type=button value="Yes" onclick="save_pic()">';
+                //'<a href="'+data_uri+'" download="app/assets/images/people/'+<%= @user.id.to_s %>+'test.jpg">Yes</a>';
+                //'<input type=button value="Yes" onClick="save_pic()">';
+        } );
+    }
+</script>
