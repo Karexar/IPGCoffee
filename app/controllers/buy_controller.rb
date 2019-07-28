@@ -41,7 +41,7 @@ class BuyController < ApplicationController
     redirect_to "/buy/show/#{params[:id]}"
   end
 
-  def edit_picture2
+  def edit_picture
       @user = User.find(params[:id])
   end
 

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   root 'index#show'
 
   get 'buy/show/:id' => 'buy#show'
-  get 'buy/edit/:id' => 'buy#edit_picture2'
+  get 'buy/edit/:id' => 'buy#edit_picture'
   post 'buy/save_picture' => 'buy#save_picture'
   post 'buy/new_order/:id' => 'buy#new'
   post 'buy/:user_id/add/:product_id' => 'buy#add'
