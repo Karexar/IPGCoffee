@@ -4,15 +4,18 @@
         <div class="user_info">
             <div class="user_image">
                 <div class="center">
-                    <% picture_name = "#{@user.id}.jpg"%>
-                    <% if !File.file?("app/assets/images/people/#{picture_name}") %>
-                      <% picture_name = "shadow.jpg" %>
-                    <% end %>
                     <%= link_to "/buy/edit/#{@user.id}" do %>
-                        <%= image_tag "people/" + picture_name,
-                                alt: "#{@user.name}'s profile picture",
-                                width: 320,
-                                height: 240 %>
+                        <% if @user.avatar.attached? %>
+                            <%= image_tag @user.avatar,
+                                    alt: "#{@user.name}'s profile picture",
+                                    width: 320,
+                                    height: 240 %>
+                        <% else %>
+                            <%= image_tag "people/shadow.jpg",
+                                    alt: "#{@user.name}'s profile picture",
+                                    width: 320,
+                                    height: 240 %>
+                        <% end %>
                     <% end %>
                 </div>
             </div>

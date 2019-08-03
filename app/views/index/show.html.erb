@@ -10,15 +10,19 @@
   <% @users.each do |user| %>
   <div class="image_user">
     <%= link_to "/buy/new_order/#{user.id}>", method: "post" do %>
-      <% picture_name = "#{user.id}.jpg"%>
-      <% if !File.file?("app/assets/images/people/#{picture_name}") %>
-        <% picture_name = "shadow.jpg" %>
-      <% end %>
-      <%= image_tag "people/#{picture_name}",
+        <% if user.avatar.attached? %>
+            <%= image_tag user.avatar,
                     alt: "#{user.name}'s profile picture",
                     width: 100,
                     height: 75 %>
-           <div><%= user.name %></div>
+        <% else %>
+            <%= image_tag "people/shadow.jpg",
+                    alt: "#{user.name}'s profile picture",
+                    width: 100,
+                    height: 75 %>
+        <% end %>
+
+        <div><%= user.name %></div>
     <% end %>
   </div>
   <% end %>

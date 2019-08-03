@@ -47,9 +47,10 @@ class BuyController < ApplicationController
 
   def save_picture
       print("*****************\n")
-      print(params[:pic])
-      print("*****************\n")
+      print(params[:image])
+      print("\n*****************\n")
       @user = User.find(params[:id])
+      #@user.avatar.attach(params[:image])
       redirect_to "/buy/show/#{params[:id]}"
   end
 end

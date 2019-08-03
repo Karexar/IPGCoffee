@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+    include ActiveStorageSupport::SupportForBase64
+    has_one_base64_attached :avatar
+
     validates :name, presence: { message: "Error : no name specified" }
     validates :name, format: { with: /\A[\p{L}\s']+\z/, message: "Error : only allows letters, spaces, and apostrophe" }
 

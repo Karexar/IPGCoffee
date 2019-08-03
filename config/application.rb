@@ -32,5 +32,7 @@ module Ipgcoffee
 
     # force HTTPS on all environments
     #config.force_ssl = true
+
+    Rails.application.config.active_storage.service = :local
   end
 end

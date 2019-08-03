@@ -33,7 +33,7 @@ gem 'bcrypt'
 
 gem "bootsnap", ">= 1.1.0", require: false
 
-#gem 'activestorage'
+gem 'active_storage_base64'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

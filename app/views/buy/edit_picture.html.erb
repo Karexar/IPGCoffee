@@ -1,3 +1,4 @@
+<%= csrf_meta_tag %>
 
 <h2>User picture</h2>
 
@@ -6,9 +7,6 @@
     <div id="results"></div>
 </div>
 
-<!-- First, include the Webcam.js JavaScript Library -->
-<script type="text/javascript" src="webcam.min.js"></script>
-<script type="text/javascript" src="download.js"></script>
 <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>-->
 
 <!-- Configure a few settings and attach camera -->
@@ -33,14 +31,26 @@
     var img_uri;
 
     function save_pic() {
-        //console.log(img_uri);
+        //document.getElementById('results').innerHTML = '<p>' + img_uri + '</p>'
+        //console.log("test");
         //download("hello world", "dlText.txt", "text/plain");
         //window.location('/buy/edit/' + <%= @user.id.to_s %>);
-        /*$.ajax({
+        $.ajax({
            url:'/buy/save_picture',
            data:(
              'id=' + <%= @user.id.to_s %> + '&' +
-             'pic=' + img_uri
+             'image=' + img_uri
+           ),
+           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+           type : 'POST',
+           datatype: 'text'
+        })
+
+        /*$.ajax({
+           url:'/some_controller/make_a_change', //Defined in your routes file
+           data:(
+             'special_id=' + $('#special_id').val() + '&' +
+             'target_area_id=' + $('#target_area_id').val()
            )
         })*/
     }
@@ -65,7 +75,7 @@
                 //  '<%= hidden_field_tag "id", @user.id.to_s %>' +
                 //  '<input type="submit" value="Yes" />' +
                 //'<% end %>';
-                //'<%= link_to "Yes", {:controller => "buy", :action => "save_picture", :image => "test", :id => @user.id }%>';
+                //'<%= link_to "Yes", {:controller => "buy", :action => "save_picture", :image => @data_uri, :id => @user.id }%>';
                 //'<input type=button value="Yes" onclick="save_pic()">';
                 //'<a href="'+data_uri+'" download="app/assets/images/people/'+<%= @user.id.to_s %>+'test.jpg">Yes</a>';
                 //'<input type=button value="Yes" onClick="save_pic()">';
