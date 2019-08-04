@@ -46,11 +46,13 @@ class BuyController < ApplicationController
   end
 
   def save_picture
-      print("*****************\n")
-      print(params[:image])
-      print("\n*****************\n")
+      #print("*****************\n")
+      #print(params[:image].gsub(/ /, "+"))
+      #print("\n*****************\n")
       @user = User.find(params[:id])
       #@user.avatar.attach(params[:image])
+      #mytest = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+      @user.avatar = { data: params[:image].gsub(/ /, "+") }
       redirect_to "/buy/show/#{params[:id]}"
   end
 end
