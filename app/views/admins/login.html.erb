@@ -4,7 +4,10 @@
   <input type="submit" value="Login" />
 <% end %>
 <% if flash[:error] != nil%>
-    <p style="color:red"><%= flash[:error]%></p>
+    <p class="red"><%= flash[:error]%></p>
 <% end %>
 <p></p>
-<a href="/">Back to main page</a>
+
+<div class="back_edit">
+    <%= button_to("Back", "/", method: :get) %>
+</div>

@@ -1,5 +1,5 @@
 <div class="horizontal">
-    <div style="color:green;">
+    <div class="green">
         <%= flash[:success] %>
     </div>
     <div>
@@ -22,7 +22,7 @@
   </div>
 <% end %>
 
-<div style="color:red;">
+<div class="red">
     <%=flash[:error_search] %>
 </div>
 <p>
@@ -34,7 +34,7 @@
           <div>
               Name : <input type="text" name="name" autocomplete="off"/>
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_name] %>
           </div>
       </div>
@@ -42,7 +42,7 @@
           <div>
               Email : <input type="text" name="email" autocomplete="off"/>
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_email] %>
           </div>
       </div>
@@ -50,7 +50,7 @@
           <div>
               Sciper : <input type="text" name="sciper" autocomplete="off"/>
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_sciper] %>
           </div>
       </div>
@@ -58,7 +58,7 @@
           <div>
               Balance : <input type="text" name="balance" autocomplete="off"/>
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_balance] %>
           </div>
       </div>
@@ -69,12 +69,26 @@
 <% end %>
 
 <h2>List of users</h2>
+<div class=horizontal_no_gap style="margin-top: -20px">
+    <p>
+          Send mail to users with low balance
+    </p>
+    <div style="margin-top: 14px; margin-left: 10px">
+        <%= button_to("Send...", "/admins/manager/write_mail", method: :get) %>
+    </div>
+</div>
 <% @users.each do |user| %>
     <div class="user_list_elem">
         <div style="width: 400px; text-align: left; margin-right:20px"><%= user.name %></div>
         <div style="width: 400px; text-align: left; margin-right:20px"><%= user.email %></div>
         <div style="width: 150px; text-align: left; margin-right:20px"><%= user.sciper %></div>
-        <div style="width: 100px; text-align: left; margin-right:20px"><%= (user.balance).round(2) %></div>
+        <% if (user.balance).round(2) < 0.0 %>
+            <div class="red" style="width: 100px; text-align: left; margin-right:20px">
+        <% else %>
+            <div class="green" style="width: 100px; text-align: left; margin-right:20px">
+        <% end %>
+                <%= (user.balance).round(2) %>
+            </div>
         <div style="width: 40px; text-align: right; margin-right: 20px">
             <%= button_to("Edit", "/admins/edit_user/" + user.id.to_s,
                 method: :get) %>

@@ -37,6 +37,12 @@ gem 'active_storage_base64'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+group :development do
+  gem "capistrano"#, "~> 3.7"
+  gem "capistrano-rails"#, "~> 1.2"
+  gem "capistrano-passenger"#, "~> 0.2.0"
+  #gem "capistrano-yarn"
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

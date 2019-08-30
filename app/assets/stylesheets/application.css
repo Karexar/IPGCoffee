@@ -24,3 +24,11 @@
  body {
      background-color: rgb(10, 10, 10);
  }
+
+ .red{
+     color: #FF0404;
+ }
+
+ .green{
+     color: #04FF04;
+ }

@@ -8,6 +8,11 @@
     justify-content: space-between;
 }
 
+.horizontal_no_gap{
+    display: flex;
+    flex-direction: row;
+}
+
 .horizontal_close{
     display: flex;
     flex-direction: row;

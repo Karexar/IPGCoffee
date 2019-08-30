@@ -15,6 +15,9 @@ Rails.application.routes.draw do
     post 'admins/save_user/:user_id' => 'admins#save_user'
     post 'admins/save_new_user/:old_sciper' => 'admins#save_new_user'
     post 'admins/add_to_balance/:user_id' => 'admins#add_to_balance'
+    get '/admins/manager/write_mail' => 'admins#write_mail'
+    post '/admins/manager/send_mail' => 'admins#send_mail'
+    delete '/admins/manager/delete_picture/:user_id' => 'admins#delete_picture'
 
     root 'index#show'
 

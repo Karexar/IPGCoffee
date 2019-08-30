@@ -5,6 +5,21 @@
 
 <h1>IPG Coffee Manager</h1>
 
+<h2>Edit user picture</h2>
+<% if @user.avatar.attached? %>
+    <%= image_tag @user.avatar,
+            alt: "#{@user.name}'s profile picture",
+            width: 240,
+            height: 180 %>
+    <%= button_to("Delete", "/admins/manager/delete_picture/" + @user.id.to_s, method: :delete) %>
+<% else %>
+    <%= image_tag "people/shadow.jpg",
+            alt: "#{@user.name}'s profile picture",
+            width: 240,
+            height: 180 %>
+<% end %>
+
+
 <h2>Edit user information</h2>
 
 <%= form_tag "/admins/save_user/"+ @user.id.to_s, method: "post" do %>
@@ -13,7 +28,7 @@
           <div>
               Name : <input type="text" name="name" value="<%=@user.name%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_name] %>
           </div>
       </div>
@@ -21,7 +36,7 @@
           <div>
               Email : <input type="text" name="email" value="<%=@user.email%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_email] %>
           </div>
       </div>
@@ -29,7 +44,7 @@
           <div>
               Sciper : <input type="text" name="sciper" value="<%=@user.sciper%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_sciper] %>
           </div>
       </div>
@@ -49,7 +64,7 @@
           <div>
               Add amount to balance : <input type="text" name="add" size="6" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_add] %>
           </div>
       </div>

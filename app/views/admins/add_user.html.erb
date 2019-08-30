@@ -6,15 +6,6 @@
 
 <h2>Add user</h2>
 
-<% if @path_pic != nil and @path_pic.is_a? String and @path_pic.length > 0%>
-<img src=<%=@path_pic%>, alt="profile picture" />
-<p>
-    '<%=@path_pic%>'
-</p>
-<% else %>
-<p>no picture found</p>
-<% end %>
-
 <%= form_tag "/admins/save_new_user/"+ @sciper, method: "post" do %>
   <%= hidden_field_tag :path_pic, @path_pic %>
   <div style="display: flex; flex-direction: column;">
@@ -22,7 +13,7 @@
           <div>
               Name : <input type="text" name="name" value="<%=@name%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_name] %>
           </div>
       </div>
@@ -30,7 +21,7 @@
           <div>
               Email : <input type="text" name="email" value="<%=@email%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class="red" style="margin-left: 10px">
               <%= flash[:error_email] %>
           </div>
       </div>
@@ -38,7 +29,7 @@
           <div>
               Sciper : <input type="text" name="sciper" value="<%=@sciper%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div clas="red" style="margin-left: 10px">
               <%= flash[:error_sciper] %>
           </div>
       </div>
@@ -46,7 +37,7 @@
           <div>
               Balance : <input type="text" name="balance" value="<%=0.0%>" />
           </div>
-          <div style="color:red; margin-left: 10px">
+          <div class ="red" style="margin-left: 10px">
               <%= flash[:error_balance] %>
           </div>
       </div>

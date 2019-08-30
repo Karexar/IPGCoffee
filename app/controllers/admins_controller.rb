@@ -2,6 +2,7 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 #require 'RMagick'
+require 'net/smtp'
 
 class AdminsController < ApplicationController
     before_action :set_current_user
@@ -60,10 +61,6 @@ class AdminsController < ApplicationController
             match = raw_text.match(/<a href="mailto:(.+)" .*/)
             if match
                 @email = match.captures[0]
-            end
-            match_pic = raw_text.match(/<img src="(https:\/\/people.epfl.ch\/[^"]+)"/)
-            if match_pic
-                @path_pic = match_pic.captures[0]
             end
             if @name == " " or match == nil
                 flash[:error_search] = "Not found"
@@ -141,48 +138,43 @@ class AdminsController < ApplicationController
     end
 
     def add_to_balance
-        user = User.find(params[:user_id])
-        add_test = params[:add] =~ /\A-?\d+([.,]\d[05]?)?\z/
-        if add_test
-            add = params[:add]
-            add.sub(",", ".")
-            add = add.to_f
-            user.balance += add
-        end
-
-        if user.valid? and add_test != nil
-            user.save
-            flash[:success] = add.round(2).to_s + " CHf added to user balance"
-            redirect_to "/admins/manager"
+        if !@current_user
+            flash[:error] = "Forbidden"
+            return redirect_to request.referrer || root_path
         else
-            if user.errors.messages[:balance][0] != nil
-                flash[:error_add] = user.errors.messages[:balance][0]
-            elsif add_test == nil
-                flash[:error_add] = "Error : value should be something like 20.0, -23.25..."
+            user = User.find(params[:user_id])
+            add_test = params[:add] =~ /\A-?\d+([.,]\d[05]?)?\z/
+            if add_test
+                add = params[:add]
+                add.sub(",", ".")
+                add = add.to_f
+                user.balance += add
             end
-            redirect_to '/admins/edit_user/' + params[:user_id]
+
+            if user.valid? and add_test != nil
+                user.save
+                flash[:success] = add.round(2).to_s + " CHf added to #{user.name}"
+                redirect_to "/admins/manager"
+            else
+                if user.errors.messages[:balance][0] != nil
+                    flash[:error_add] = user.errors.messages[:balance][0]
+                elsif add_test == nil
+                    flash[:error_add] = "Error : value should be something like 20.0, -23.25..."
+                end
+                redirect_to '/admins/edit_user/' + params[:user_id]
+            end
         end
     end
 
     def save_new_user
         if !@current_user
-            flash[:success] = "Forbidden"
+            flash[:error] = "Forbidden"
             return redirect_to request.referrer || root_path
         else
             balance_test = params[:balance] =~ /\A-?\d+([.,]\d[05]?)?\z/
             user = User.new name: params[:name], email: params[:email], sciper: params[:sciper], balance: params[:balance]
-            @path_pic = nil
             if user.valid? and balance_test != nil
                 user.save
-                # Save image to disk
-                if params[:path_pic] != nil
-                    IO.copy_stream(open(params[:path_pic]), 'app/assets/images/people/'+user.id.to_s+'.png')
-                end
-                #image = Magick::Image.read('app/assets/images/people/'+user.id.to_s+'.png').first
-                #image.change_geometry!("640x480") { |cols, rows, img|
-                #    newimg = img.resize(cols, rows)
-                #    newimg.write('app/assets/images/people/'+user.id.to_s+'.png')
-                #}
                 flash[:success] = "The user has been successfully created"
                 redirect_to "/admins/manager"
             else
@@ -200,9 +192,85 @@ class AdminsController < ApplicationController
                 @email = params[:email]
                 @sciper = params[:sciper]
                 @balance = params[:balance]
-                @path_pic = params[:path_pic]
                 render 'add_user'
             end
+        end
+    end
+
+    def write_mail
+        if !@current_user
+            flash[:error] = "Forbidden"
+            return redirect_to request.referrer || root_path
+        else
+
+        end
+    end
+
+    def send_mail
+        if !@current_user
+            flash[:error] = "Forbidden"
+            return redirect_to request.referrer || root_path
+        else
+            external_users = []
+            User.all.each do |user|
+                if user.balance < params[:threshold].to_f
+                    message_header = ''
+                    message_header << "From: IPG Cafeteria <noreply@epfl.ch>\n"
+                    message_header << "To: <" + user.email + ">\n"
+                    message_header << "Subject: " + params[:subject] + "\n"
+
+                    content = params[:content].gsub("VALUE", sprintf('%.2f',user.balance.round(2)))
+                    message = message_header + "\n" + content + "\n"
+
+                    Net::SMTP.start('smtp1.epfl.ch') do |smtp|
+                        if user.email.end_with?("@epfl.ch")
+                            smtp.send_message message, 'noreply@epfl.ch', user.email
+                        else
+                            external_users.push(user)
+                        end
+                    end
+                end
+            end
+            if external_users.length > 0
+                message_header = ''
+                message_header << "From: <noreply@epfl.ch> IPG Cafeteria\n"
+                message_header << "To: <" + params[:in_charge] + ">\n"
+                message_header << "Subject: IPG Cafeteria : balance management\n"
+
+                content = "Hello,
+
+The following users have an IPG cafeteria account with a negative balance, but they don't have an epfl email address so they can't be contacted automatically.
+
+"
+                external_users.each do |user|
+                    content << user.name + " (" + user.email + ") : balance is CHf " + sprintf('%.2f',user.balance.round(2)) + "\n"
+                end
+                content << "
+You can contact them personally to let them know to whom they have to go to make their balance positive again.
+
+Have a nice day"
+
+                message = message_header + "\n" + content + "\n"
+
+                Net::SMTP.start('smtp1.epfl.ch') do |smtp|
+                    smtp.send_message message, 'noreply@epfl.ch', params[:in_charge]
+                end
+            end
+
+            flash[:success] = "Emails sent"
+
+            redirect_to "/admins/manager"
+        end
+    end
+
+    def delete_picture
+        if !@current_user
+            flash[:error] = "Forbidden"
+            return redirect_to request.referrer || root_path
+        else
+            @user = User.find(params[:user_id])
+            @user.avatar.purge
+            redirect_to "/admins/edit_user/" + params[:user_id]
         end
     end
 
