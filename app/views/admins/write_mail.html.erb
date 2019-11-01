@@ -1,0 +1,38 @@
+<h1>IPG Coffee Manager</h1>
+
+<%= form_tag "/admins/manager/send_mail", method: "post" do %>
+  <div class="vertical">
+      <div>
+          Your email address : <input type="text" name="in_charge" style="width: 300px;" value="muriel.bardet@epfl.ch"/>
+      </div>
+      <div style="margin-top: 20px">
+          Send the following mail to all people whose account balance is under <input type="text" name="threshold" style="width: 30px;" value="0"/> CHf
+      </div>
+      <div style="margin-top: 20px;">
+          Subject :
+      </div>
+      <input type="text" name="subject" style="width: 400px;" value="Your balance is negative" />
+      <div>
+          Content :
+      </div>
+      <textarea type="textarea" name="content" style="width: 400px; height: 150px">
+Hello,
+
+Your account at the cafeteria Bagdhad café INR120 is negative (CHf VALUE).
+Please contact promptly Françoise Behn in INR 133 to provide her with the necessary amount to make your account balance positive again.
+
+Thank you!
+      </textarea>
+<p>
+Note : VALUE represents the balance of the user. When sending the mails, it will be replaced by the amount corresponding to the users.
+</p>
+      <div>
+          <input type="submit" value="Send" />
+      </div>
+  </div>
+<% end %>
+
+
+<div class="back_edit">
+    <%= button_to("Back", "/admins/manager/", method: :get) %>
+</div>
