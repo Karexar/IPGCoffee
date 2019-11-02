@@ -11,7 +11,7 @@ set :stage, :production
 set :rails_env, :production
 set :branch, "master"
 
-server "192.168.70.32", user: "bardet", roles: %w{app db web}
+server "web32", user: "bardet", roles: %w{app db web} # untrusted="192.168.70.32"
 role :app, %w{bardet@web32}
 
 # role-based syntax
@@ -46,7 +46,11 @@ role :app, %w{bardet@web32}
 #
 # Global options
 # --------------
-#  set :ssh_options, {
+ set :ssh_options, {
+    forward_agent: true,
+    keys: "~/.ssh/id_rsa"
+ }
+ # set :ssh_options, {
 #    keys: %w(/home/rlisowski/.ssh/id_rsa),
 #    forward_agent: false,
 #    auth_methods: %w(password)
