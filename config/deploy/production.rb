@@ -12,7 +12,7 @@ set :rails_env, :production
 set :branch, "master"
 
 server "192.168.70.32", user: "bardet", roles: %w{app db web}
-role :app, %w{bardet@web32.untrusted.epfl.ch}
+role :app, %w{bardet@web32}
 
 # role-based syntax
 # ==================
